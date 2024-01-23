@@ -1,9 +1,18 @@
 // ❗ You don't need to add extra reducers to achieve MVP
 import { combineReducers } from 'redux'
+import { MOVE_CLOCKWISE, MOVE_COUNTERCLOCKWISE } from './action-types'
 
-const initialWheelState = 0
+// Modify the wheel reducer
+const initialWheelState = 0;
 function wheel(state = initialWheelState, action) {
-  return state
+  switch (action.type) {
+    case MOVE_CLOCKWISE:
+      return (state + 1) % 6; // Update the state for clockwise movement
+    case MOVE_COUNTERCLOCKWISE:
+      return (state - 1 + 6) % 6; // Update the state for counter-clockwise movement
+    default:
+      return state;
+  }
 }
 
 const initialQuizState = null
