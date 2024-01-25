@@ -9,9 +9,9 @@ const initialWheelState = 0;
 function wheel(state = initialWheelState, action) {
   switch (action.type) {
     case MOVE_CLOCKWISE:
-      return (state + 1) % 6; // Update the state for clockwise movement
+      return (state + 1) > 5 ? 0 : state + 1; // Update the state for clockwise movement
     case MOVE_COUNTERCLOCKWISE:
-      return (state - 1 + 5) % 6; // Update the state for counter-clockwise movement
+      return (state - 1) < 0 ? 5 : state - 1; // Update the state for counter-clockwise movement
     default:
       return state;
   }

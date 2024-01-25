@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../state/action-creators';
 
 export function Form(props) {
-  console.log(props);
+  // console.log(props);
 
-  const [isInputsValid, setIsInputsValid] = useState(true);
+  const [isInputsValid, setIsInputsValid] = useState(false);
 
   const onChange = evt => {
     props.inputChange(evt.target.id, evt.target.value);
@@ -15,16 +15,20 @@ export function Form(props) {
   const onSubmit = evt => {
     evt.preventDefault();
 
-    // Check if all inputs have values more than one character in length after trimming
-    const isValid = Object.values(props.form).every(value => value.trim().length > 1);
-    setIsInputsValid(isValid);
-
-    if (isValid) {
+    
+    if (isInputsValid) {
       props.postQuiz(props.form.newQuestion, props.form.newTrueAnswer, props.form.newFalseAnswer);
     } else {
       // Handle invalid form submission (e.g., show a message)
       console.log('Invalid form submission');
     }
+  }
+  
+  // Check if all inputs have values more than one character in length after trimming
+  const isDisabled = () => {
+    const isValid = Object.values(props.form).every(value => value.trim().length > 1);
+    setIsInputsValid(isValid);
+    return isValid;
   }
 
   return (
@@ -51,7 +55,7 @@ export function Form(props) {
         id="newFalseAnswer"
         placeholder="Enter false answer"
       />
-      <button id="submitNewQuizBtn" disabled={!isInputsValid}>
+      <button id="submitNewQuizBtn" disabled={isDisabled()}>
         Submit new quiz
       </button>
     </form>
