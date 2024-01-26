@@ -1,35 +1,32 @@
-/// Form.js
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import * as actionCreators from '../state/action-creators';
+// Form.js
+import React from "react";
+import { connect } from "react-redux";
+import * as actionCreators from "../state/action-creators";
 
 export function Form(props) {
-  // console.log(props);
-
-  const [isInputsValid, setIsInputsValid] = useState(false);
-
-  const onChange = evt => {
+  const onChange = (evt) => {
     props.inputChange(evt.target.id, evt.target.value);
-  }
+  };
 
-  const onSubmit = evt => {
+  const onSubmit = (evt) => {
     evt.preventDefault();
 
-    
-    if (isInputsValid) {
-      props.postQuiz(props.form.newQuestion, props.form.newTrueAnswer, props.form.newFalseAnswer);
+    if (props.isInputsValid) {
+      props.postQuiz(
+        props.form.newQuestion,
+        props.form.newTrueAnswer,
+        props.form.newFalseAnswer
+      );
     } else {
       // Handle invalid form submission (e.g., show a message)
-      console.log('Invalid form submission');
+      console.log("Invalid form submission");
     }
-  }
-  
-  // Check if all inputs have values more than one character in length after trimming
+  };
+
   const isDisabled = () => {
-    const isValid = Object.values(props.form).every(value => value.trim().length > 1);
-    setIsInputsValid(isValid);
-    return isValid;
-  }
+    // Ensure this always returns a boolean (true or false)
+    return Object.values(props.form).some((value) => value.trim().length <= 1);
+  };
 
   return (
     <form id="form" onSubmit={onSubmit}>
@@ -59,13 +56,19 @@ export function Form(props) {
         Submit new quiz
       </button>
     </form>
-  )
+  );
 }
 
 const mapStateToProps = (state) => {
-   return {
-     form: state.form
-   }
-}
+  return {
+    form: state.form,
+    isInputsValid: Object.values(state.form).every(
+      (value) => value.trim().length > 1
+    ),
+  };
+};
 
-export default connect(mapStateToProps, { inputChange: actionCreators.inputChange, postQuiz: actionCreators.postQuiz })(Form);
+export default connect(mapStateToProps, {
+  inputChange: actionCreators.inputChange,
+  postQuiz: actionCreators.postQuiz,
+})(Form);
